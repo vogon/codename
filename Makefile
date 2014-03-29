@@ -1,4 +1,4 @@
-SOURCES = main.d
+SOURCES = main.d lua.di
 
 .PHONY: all clean
 

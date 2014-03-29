@@ -13,5 +13,7 @@ cmake ..
 make -j4
 make install
 
+apt-get -y install gdb
+
 apt-get -y install libzmq-dev
 apt-get -y install liblua5.2-dev
