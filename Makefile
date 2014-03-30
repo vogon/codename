@@ -1,5 +1,5 @@
-DC = dmd
-DFLAGS = -debug -gc -L-llua5.2
+DC = ldc2
+DFLAGS = -L-llua5.2
 SOURCES = main.d lua/c_api.d lua/lua.d
 
 .PHONY: all clean
@@ -7,7 +7,7 @@ SOURCES = main.d lua/c_api.d lua/lua.d
 all: codename
 
 codename: $(SOURCES)
-	$(DC) -of$@ $(SOURCES) $(DFLAGS)
+	$(DC) -of=$@ $(SOURCES) $(DFLAGS)
 
 clean:
 	rm -f codename
