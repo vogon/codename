@@ -18,34 +18,26 @@ class LuaState
 private:
 	lua_State *_state;
 
-	char *malloc_readLastChunk;
+	char *malloc_readChunk;
 	File readFile;
 
 	extern (C) static const(char) *read_chunk(lua_State *L, void *data, size_t *size)
 	{
 		LuaState *state = cast(LuaState *)data;
-
-		if (state.malloc_readLastChunk != null)
-		{
-			GC.free(state.malloc_readLastChunk);
-			state.malloc_readLastChunk = null;
-		}
-
 		char[1024] buffer;
 		char[] read = state.readFile.rawRead(buffer);
 
 		if (read.length > 0)
 		{
 			*size = read.length;
-			state.malloc_readLastChunk = cast(char *)GC.malloc(read.length);
-			memcpy(state.malloc_readLastChunk, cast(void *)read, read.length);
+			memcpy(state.malloc_readChunk, cast(void *)read, read.length);
 		}
 		else
 		{
 			*size = 0;
 		}
 
-		return state.malloc_readLastChunk;
+		return state.malloc_readChunk;
 	}
 
 	void _call(int nargs, int nresults, int errfunc)
@@ -78,6 +70,9 @@ public:
 
 	void load(string filename)
 	{
+		malloc_readChunk = cast(char *)GC.malloc(1024);
+		scope (exit) GC.free(malloc_readChunk);
+
 		readFile = File(filename, "r");
 
 		int loadResult =
