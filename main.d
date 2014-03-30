@@ -1,51 +1,41 @@
 import std.stdio;
 import std.c.string;
 import core.memory;
+import core.sys.posix.setjmp;
 import lua;
 
-char *malloc_lastChunk;
-
-extern (C) const char *read_chunk(lua_State *L, void *data, size_t *size)
+class LuaException : object.Exception
 {
-	if (malloc_lastChunk != null)
+	this()
 	{
-		GC.free(malloc_lastChunk);
-		malloc_lastChunk = null;
+		super("Lua exception");
 	}
-
-	File *f = cast(File *)data;
-	char[1024] buffer;
-	char[] read = f.rawRead(buffer);
-
-	if (read.length > 0)
-	{
-		*size = read.length;
-		malloc_lastChunk = cast(char *)GC.malloc(read.length);
-		memcpy(malloc_lastChunk, cast(void *)read, read.length);
-	}
-	else
-	{
-		*size = 0;
-	}
-
-	return malloc_lastChunk;
 }
 
 int main(string[] args)
 {
-	lua_State *state = luaL_newstate();
-	luaL_openlibs(state);
+	LuaState state = new LuaState();
 
-	auto f = File("script.lua", "r");
+	//lua_State *state = luaL_newstate();
+	//luaL_openlibs(state);
 
-	int loadResult = 
-		lua_load(state, &read_chunk, &f, "script.lua", null);
+	//auto f = File("script.lua", "r");
 
-	writeln("hi!");
+	//int loadResult = 
+	//	lua_load(state, &read_chunk, &f, "script.lua", null);
 
-	lua_callk(state, 0, 0, 0, null);
+	//writeln("hi!");
 
-	lua_close(state);
+	//try 
+	//{
+	//	lua_pcall(state, 0, 0, 0);
+	//}
+	//catch (Exception e)
+	//{
+	//	writeln("hello!");
+	//}
+
+	//lua_close(state);
 
 	return 0;
 }

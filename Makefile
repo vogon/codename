@@ -1,11 +1,13 @@
-SOURCES = main.d lua.di
+DC = dmd
+DFLAGS = -debug -gc -L-llua5.2
+SOURCES = main.d lua/c_api.d lua/lua.d
 
 .PHONY: all clean
 
 all: codename
 
 codename: $(SOURCES)
-	ldc2 -of=$@ $(SOURCES) -L-llua5.2
+	$(DC) -of$@ $(SOURCES) $(DFLAGS)
 
 clean:
 	rm -f codename

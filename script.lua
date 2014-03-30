@@ -1,1 +1,1 @@
-print('hi from lua!')
+butts('hi from lua!')

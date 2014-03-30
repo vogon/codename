@@ -1,19 +1,10 @@
-apt-get -y install g\+\+ cmake llvm libconfig\+\+ git
+# set up D APT
+wget http://netcologne.dl.sourceforge.net/project/d-apt/files/d-apt.list -O /etc/apt/sources.list.d/d-apt.list
+apt-get update
+apt-get -y --allow-unauthenticated install --reinstall d-apt-keyring
+apt-get update
 
-git clone https://github.com/ldc-developers/ldc.git
-
-cd ldc
-git submodule update --init
-
-git checkout release-0.12.1
-
-rm -rf build
-mkdir build && cd build
-cmake ..
-make -j4
-make install
-
-apt-get -y install gdb
+apt-get -y install dmd-bin dub gdb
 
 apt-get -y install libzmq-dev
 apt-get -y install liblua5.2-dev
