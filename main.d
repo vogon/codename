@@ -1,8 +1,5 @@
-import std.c.string;
 import std.file;
 import std.stdio;
-import core.memory;
-import core.sys.posix.setjmp;
 import lua;
 
 int main(string[] args)
